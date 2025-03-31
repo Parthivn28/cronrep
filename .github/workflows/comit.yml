@@ -1,0 +1,26 @@
+name: Daily Scheduled Commit
+
+on:
+  schedule:
+    # Runs every day at 05:00 UTC (specific hour/minute, not wildcards)
+    - cron: '0 5 * * *'
+
+jobs:
+  commit-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Add commit - 23f3001787@ds.study.iitm.ac.in
+        run: |
+          echo "Daily commit run at $(date)" >> commit.txt
+          git config user.name "github-actions"
+          git config user.email "23f3001787@ds.study.iitm.ac.in"
+          git add commit.txt
+          git commit -m "Daily commit $(date)"
+          
+      - name: Push Changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
